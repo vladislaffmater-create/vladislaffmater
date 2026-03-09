@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админ-панель — Покос-Обнинск</title>
+  <meta name="description" content="Админ-панель Покос-Обнинск.">
+  <meta property="og:title" content="Покос травы в Обнинске">
+  <meta property="og:description" content="Закажите покос участка. Выезд в день заявки.">
+  <meta property="og:image" content="images/og-preview.jpg">
+  <meta property="og:url" content="https://yoursite.ru/admin.html">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/main.js"></script>
+  <script defer src="js/reviews.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script defer src="js/admin.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">Покос-Обнинск</a>
+      <nav class="nav" id="mainNav">
+        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-list">
+          <li><a href="services.html">Услуги и цены</a></li>
+          <li><a href="booking.html">Бронирование</a></li>
+          <li><a href="reviews.html">Отзывы</a></li>
+          <li><a href="promo.html">Акции</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+          <li><a href="admin.html" class="is-active">Админ</a></li>
+        </ul>
+      </nav>
+      <span class="header-phone"><i class="fas fa-user-shield"></i><span>Админ-панель</span></span>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="adminLogin">
+      <div class="container">
+        <h1 class="section-title">Вход в админ‑панель</h1>
+        <form class="form" id="adminLoginForm">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="adminLoginInput">Логин</label>
+              <input
+                type="text"
+                id="adminLoginInput"
+                name="login"
+                autocomplete="username"
+                required
+                placeholder="Логин администратора"
+              >
+            </div>
+            <div class="form-field">
+              <label for="adminPasswordInput">Пароль</label>
+              <input
+                type="password"
+                id="adminPasswordInput"
+                name="password"
+                autocomplete="current-password"
+                required
+                placeholder="Пароль"
+              >
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Войти</button>
+          <p class="form-note">Доступ в админ‑панель только для владельца сервиса.</p>
+        </form>
+      </div>
+    </section>
+
+    <div id="adminProtected" style="display:none;">
+      <section class="page-hero">
+        <div class="container">
+          <h1>Админ-панель</h1>
+          <p class="page-hero-subtitle">Просмотр заявок и отзывов из localStorage для тестирования фронтенда.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Заявки на бронирование</h2>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <button class="btn btn-outline" id="exportBookingsBtn">Экспорт JSON</button>
+              <button class="btn btn-outline" id="exportBookingsCsvBtn">Экспорт отчёта (CSV, по фильтру)</button>
+              <button class="btn btn-ghost" id="clearBookingsBtn">Очистить заявки (localStorage)</button>
+            </div>
+          </div>
+          <div class="admin-stats" id="bookingsStats">
+            <div class="admin-stat-card">
+              <div class="admin-stat-label">Всего заявок</div>
+              <div class="admin-stat-value" id="statTotalBookings">0</div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-label">Новых</div>
+              <div class="admin-stat-value" id="statNewBookings">0</div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-label">Обработано</div>
+              <div class="admin-stat-value" id="statDoneBookings">0</div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-label">Не дозвонились</div>
+              <div class="admin-stat-value" id="statNoAnswerBookings">0</div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-label">Просили перезвонить</div>
+              <div class="admin-stat-value" id="statRecallBookings">0</div>
+            </div>
+            <div class="admin-stat-card">
+              <div class="admin-stat-label">Суммарная площадь, соток</div>
+              <div class="admin-stat-value" id="statTotalArea">0</div>
+            </div>
+          </div>
+          <div class="admin-chart-wrapper">
+            <h3 class="section-title section-title-small">Заявки за последние 7 дней (по статусам)</h3>
+            <div class="admin-chart" id="bookingsChart"></div>
+            <div class="admin-chart-legend">
+              <span><span class="admin-chart-legend-color legend-new"></span>Новая</span>
+              <span><span class="admin-chart-legend-color legend-done"></span>Обработано</span>
+              <span><span class="admin-chart-legend-color legend-noanswer"></span>Не дозвонились</span>
+              <span><span class="admin-chart-legend-color legend-recall"></span>Просили перезвонить</span>
+            </div>
+            <p class="form-note">Диаграмма и статистика учитывают выбранные фильтры по дате и статусу.</p>
+          </div>
+          <div class="admin-analytics-row">
+            <div class="admin-analytics-card admin-analytics-card-wide">
+              <div class="admin-analytics-header">
+                <div>
+                  <h3 class="section-title section-title-small">Топ‑услуги по заявкам</h3>
+                  <p class="admin-analytics-subtitle">По количеству заявок и суммарной площади за выбранный период.</p>
+                </div>
+              </div>
+              <ul class="admin-analytics-list admin-analytics-list-wide" id="topServicesList"></ul>
+            </div>
+          </div>
+          <div class="admin-filters">
+            <input type="text" id="bookingsSearch" class="admin-search" placeholder="Поиск по имени или телефону">
+            <input type="date" id="bookingsDateFrom" class="admin-date" title="Дата от">
+            <input type="date" id="bookingsDateTo" class="admin-date" title="Дата до">
+            <select id="bookingsStatusFilter" class="admin-select">
+              <option value="">Все статусы</option>
+              <option value="new">Новая</option>
+              <option value="обработано">Обработано</option>
+              <option value="не дозвонились">Не дозвонились</option>
+              <option value="просили перезвонить">Просили перезвонить</option>
+            </select>
+          </div>
+          <div class="admin-table-wrapper">
+            <table class="admin-table" id="bookingsTable">
+              <thead>
+                <tr>
+                  <th>Дата заявки</th>
+                  <th>Имя</th>
+                  <th>Телефон</th>
+                  <th>Услуга</th>
+                  <th>Площадь</th>
+                  <th>Дата/время выезда</th>
+                  <th>Адрес</th>
+                  <th>Комментарий клиента</th>
+                  <th>Статус</th>
+                  <th>Комментарий администратора</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+            <p class="form-note" id="bookingsEmptyNote">Пока нет сохранённых заявок.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2 class="section-title">Конструктор</h2>
+          <p class="section-text" style="margin-bottom:16px;">Редактирование контента сайта без правки кода: акции, контакты в шапке и подвале.</p>
+          <div class="constructor-tabs">
+            <button type="button" class="constructor-tab is-active" data-tab="promos">Акции</button>
+            <button type="button" class="constructor-tab" data-tab="contacts">Контакты</button>
+          </div>
+          <div id="constructorPromos" class="constructor-panel">
+            <div class="section-header" style="margin-bottom:12px;">
+              <h3 class="section-title section-title-small">Акции на странице promo.html</h3>
+              <button type="button" class="btn btn-primary" id="constructorAddPromo">Добавить акцию</button>
+            </div>
+            <div id="promosList" class="constructor-promos-list"></div>
+          </div>
+          <div id="constructorContacts" class="constructor-panel" style="display:none;">
+            <h3 class="section-title section-title-small" style="margin-bottom:12px;">Контакты (шапка и подвал на всех страницах)</h3>
+            <form class="form" id="constructorContactsForm">
+              <div class="form-grid">
+                <div class="form-field">
+                  <label for="sitePhone">Телефон</label>
+                  <input type="text" id="sitePhone" placeholder="+7 (900) 000-00-00">
+                </div>
+                <div class="form-field">
+                  <label for="siteEmail">Email</label>
+                  <input type="email" id="siteEmail" placeholder="info@pokos-obninsk.ru">
+                </div>
+                <div class="form-field">
+                  <label for="siteTelegram">Telegram (ссылка или @ник)</label>
+                  <input type="text" id="siteTelegram" placeholder="https://t.me/yourtelegram">
+                </div>
+                <div class="form-field">
+                  <label for="siteWhatsapp">WhatsApp (номер для wa.me)</label>
+                  <input type="text" id="siteWhatsapp" placeholder="79000000000">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Сохранить контакты</button>
+            </form>
+          </div>
+          <p class="form-note" style="margin-top:16px;">В конструктор можно добавить: заголовок и подзаголовок главной страницы, часы работы, блок «Почему мы» (карточки), базовую цену и коэффициенты калькулятора.</p>
+          <div id="promoModal" class="constructor-modal" style="display:none;">
+            <div class="constructor-modal-backdrop"></div>
+            <div class="constructor-modal-content form">
+              <h3 class="section-title section-title-small">Редактирование акции</h3>
+              <input type="hidden" id="promoEditId">
+              <div class="form-field">
+                <label for="promoBadge">Бейдж (например -10% или Весна)</label>
+                <input type="text" id="promoBadge" placeholder="-10%">
+              </div>
+              <div class="form-field">
+                <label for="promoTitle">Заголовок</label>
+                <input type="text" id="promoTitle" placeholder="Скидка 10% на первый заказ">
+              </div>
+              <div class="form-field">
+                <label for="promoDescription">Описание</label>
+                <textarea id="promoDescription" rows="3" placeholder="Краткое описание акции"></textarea>
+              </div>
+              <div class="form-field">
+                <label>Пункты списка (каждый с новой строки)</label>
+                <textarea id="promoPoints" rows="4" placeholder="Пункт 1&#10;Пункт 2"></textarea>
+              </div>
+              <div class="form-field">
+                <label for="promoButtonValue">Текст для кнопки «Забронировать» (попадает в заявку)</label>
+                <input type="text" id="promoButtonValue" placeholder="Скидка 10% на первый заказ">
+              </div>
+              <div style="display:flex;gap:8px;margin-top:12px;">
+                <button type="button" class="btn btn-primary" id="promoModalSave">Сохранить</button>
+                <button type="button" class="btn btn-ghost" id="promoModalCancel">Отмена</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-alt">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="section-title">Отзывы</h2>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              <button class="btn btn-outline" id="exportReviewsBtn">Экспорт JSON</button>
+              <button class="btn btn-ghost" id="clearReviewsBtn">Очистить отзывы (кроме тестовых)</button>
+            </div>
+          </div>
+          <div class="admin-table-wrapper">
+            <table class="admin-table" id="reviewsTable">
+              <thead>
+                <tr>
+                  <th>Дата</th>
+                  <th>Имя</th>
+                  <th>Оценка</th>
+                  <th>Текст</th>
+                  <th>Фото</th>
+                  <th>Статус</th>
+                  <th>Действия</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+            <p class="form-note" id="reviewsEmptyNote">Пока нет сохранённых отзывов.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-block">
+        <div class="logo footer-logo">Покос-Обнинск</div>
+        <p>Покос травы и уход за участками в Обнинске и Калужской области.</p>
+        <p class="footer-copy">&copy; <span id="year"></span> Покос-Обнинск. Все права защищены.</p>
+      </div>
+      <div class="footer-block">
+        <h3>Контакты</h3>
+        <ul class="footer-list">
+          <li><i class="fas fa-phone-alt"></i><a href="tel:+79000000000">+7 (900) 000-00-00</a></li>
+          <li><i class="fas fa-envelope"></i><a href="mailto:info@pokos-obninsk.ru">info@pokos-obninsk.ru</a></li>
+          <li><i class="fab fa-telegram"></i><a href="https://t.me/yourtelegram" target="_blank" rel="noopener">Telegram</a></li>
+          <li><i class="fab fa-whatsapp"></i><a href="https://wa.me/79000000000" target="_blank" rel="noopener">WhatsApp</a></li>
+        </ul>
+      </div>
+      <div class="footer-block">
+        <h3>Навигация</h3>
+        <ul class="footer-list">
+          <li><a href="services.html">Услуги и цены</a></li>
+          <li><a href="booking.html">Бронирование</a></li>
+          <li><a href="reviews.html">Отзывы</a></li>
+          <li><a href="promo.html">Акции</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+          <li><a href="admin.html" class="is-active">Админ</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toastContainer"></div>
+</body>
+</html>
+

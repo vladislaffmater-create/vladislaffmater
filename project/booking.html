@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бронирование — Покос-Обнинск</title>
+  <meta name="description" content="Заказать покос травы в Обнинске. Онлайн-бронирование, выбор даты и времени выезда.">
+  <meta property="og:title" content="Бронирование — Покос-Обнинск">
+  <meta property="og:description" content="Закажите покос участка. Выезд в день заявки.">
+  <meta property="og:image" content="images/og-preview.jpg">
+  <meta property="og:url" content="https://yoursite.ru/booking.html">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/main.js"></script>
+  <script defer src="js/site-settings.js"></script>
+  <script defer src="js/telegram.js"></script>
+  <script defer src="js/booking.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">Покос-Обнинск</a>
+      <nav class="nav" id="mainNav">
+        <button class="nav-toggle" id="navToggle" aria-label="Открыть меню">
+          <span></span><span></span><span></span>
+        </button>
+        <ul class="nav-list">
+          <li><a href="services.html">Услуги и цены</a></li>
+          <li><a href="booking.html" class="is-active">Бронирование</a></li>
+          <li><a href="reviews.html">Отзывы</a></li>
+          <li><a href="promo.html">Акции</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+      </nav>
+      <a href="tel:+79000000000" class="header-phone"><i class="fas fa-phone-alt"></i><span>+7 (900) 000-00-00</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1>Онлайн-бронирование</h1>
+        <p class="page-hero-subtitle">Выберите удобную дату и время выезда мастера. Доступные слоты — с 8:00 до 20:00 с шагом 1 час.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container booking-layout">
+        <div class="booking-calendar">
+          <h2 class="section-title">Календарь записи</h2>
+          <input type="text" id="datePicker" class="date-input" placeholder="Выберите дату и время" readonly>
+          <p class="form-note">Вы можете выбрать только актуальные даты и время с 8:00 до 20:00.</p>
+        </div>
+
+        <div class="booking-form-wrapper">
+          <h2 class="section-title">Данные для бронирования</h2>
+          <form class="form" id="bookingForm">
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="fullName">ФИО*</label>
+                <input type="text" id="fullName" name="fullName" required placeholder="Иванов Иван Иванович">
+              </div>
+              <div class="form-field">
+                <label for="phone">Телефон*</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  required
+                  placeholder="+7 (___) ___-__-__"
+                  data-phone-mask="true"
+                  maxlength="18"
+                >
+              </div>
+              <div class="form-field">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="example@mail.ru"
+                  data-email-validate="true"
+                >
+              </div>
+              <div class="form-field">
+                <label for="telegram">Telegram</label>
+                <input type="text" id="telegram" name="telegram" placeholder="@username">
+              </div>
+              <div class="form-field form-field-full">
+                <label for="address">Адрес участка*</label>
+                <input type="text" id="address" name="address" required placeholder="Город/посёлок, улица, ориентиры">
+              </div>
+              <div class="form-field">
+                <label for="serviceType">Услуга*</label>
+                <select id="serviceType" name="serviceType" required>
+                  <option value="">Выберите услугу</option>
+                  <option value="Покос травы">Покос травы</option>
+                  <option value="Покос + сбор травы">Покос + сбор травы</option>
+                  <option value="Покос + вывоз травы">Покос + вывоз травы</option>
+                  <option value="Индивидуально">Индивидуально</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <label for="area">Площадь (сотки)</label>
+                <input type="number" id="area" name="area" min="1" step="0.1" placeholder="Например, 15">
+              </div>
+              <div class="form-field form-field-full">
+                <label for="comment">Комментарий</label>
+                <textarea id="comment" name="comment" rows="3" placeholder="Описание зарослости, особенности подъезда и т.п."></textarea>
+              </div>
+              <div class="form-field form-field-full">
+                <label for="slot">Выбранная дата и время*</label>
+                <input type="text" id="slot" name="slot" required readonly placeholder="Сначала выберите дату и время в календаре">
+              </div>
+            </div>
+
+            <p class="form-note" id="bigAreaNote" hidden>Для больших участков возможна предоплата по договорённости. Мы уточним детали при звонке.</p>
+
+            <button type="submit" class="btn btn-primary">Забронировать</button>
+            <p class="form-note">После отправки заявки мы свяжемся с вами для подтверждения и уточнения деталей.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-block">
+        <div class="logo footer-logo">Покос-Обнинск</div>
+        <p>Покос травы и уход за участками в Обнинске и Калужской области.</p>
+        <p class="footer-copy">&copy; <span id="year"></span> Покос-Обнинск. Все права защищены.</p>
+      </div>
+      <div class="footer-block">
+        <h3>Контакты</h3>
+        <ul class="footer-list">
+          <li><i class="fas fa-phone-alt"></i><a href="tel:+79000000000">+7 (900) 000-00-00</a></li>
+          <li><i class="fas fa-envelope"></i><a href="mailto:info@pokos-obninsk.ru">info@pokos-obninsk.ru</a></li>
+          <li><i class="fab fa-telegram"></i><a href="https://t.me/yourtelegram" target="_blank" rel="noopener">Telegram</a></li>
+          <li><i class="fab fa-whatsapp"></i><a href="https://wa.me/79000000000" target="_blank" rel="noopener">WhatsApp</a></li>
+        </ul>
+      </div>
+      <div class="footer-block">
+        <h3>Навигация</h3>
+        <ul class="footer-list">
+          <li><a href="services.html">Услуги и цены</a></li>
+          <li><a href="booking.html" class="is-active">Бронирование</a></li>
+          <li><a href="reviews.html">Отзывы</a></li>
+          <li><a href="promo.html">Акции</a></li>
+          <li><a href="contacts.html">Контакты</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+</body>
+</html>
