@@ -1,0 +1,12 @@
+# Покос-Обнинск — правила для поисковых роботов
+# После публикации замените https://yoursite.ru на ваш реальный домен в sitemap.xml
+
+User-agent: *
+Allow: /
+
+# Админку не индексируем
+Disallow: /admin.html
+Disallow: /account.html
+
+# Файл с перечнем страниц (замените yoursite.ru на ваш домен)
+Sitemap: https://yoursite.ru/sitemap.xml
